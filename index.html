@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Aniversário, Meu Amor</title>
+    <style>
+        /* RESET E ESTILOS GERAIS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #fff5f5;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* TELA DE ABERTURA */
+        #tela-presente {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #d23669;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: all 1s ease;
+        }
+
+        #tela-presente.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mensagem-presente {
+            color: white;
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+            padding: 0 20px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .botao-presente {
+            background: white;
+            color: #d23669;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+
+        .botao-presente:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .coracao {
+            font-size: 1.5em;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+            margin: 0 5px;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        #conteudo-principal {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        /* CABEÇALHO */
+        header {
+            background: #d23669;
+            color: white;
+            text-align: center;
+            padding: 80px 20px 60px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s;
+        }
+
+        .subtitulo {
+            font-size: 1.3em;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+            opacity: 0.9;
+            animation: fadeIn 3s;
+        }
+
+        /* LINHA DO TEMPO */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px 20px;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: #d23669;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 10px;
+        }
+
+        .momento {
+            padding: 30px 40px;
+            position: relative;
+            background: white;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            width: 42%;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .momento.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .momento:nth-child(odd) {
+            left: 0;
+        }
+
+        .momento:nth-child(even) {
+            left: 50%;
+        }
+
+        .momento::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #d23669;
+            border-radius: 50%;
+            top: 40px;
+            z-index: 1;
+            box-shadow: 0 0 0 4px #ffebee;
+        }
+
+        .momento:nth-child(odd)::after {
+            right: -12px;
+        }
+
+        .momento:nth-child(even)::after {
+            left: -12px;
+        }
+
+        .momento h2 {
+            color: #d23669;
+            margin-top: 0;
+            font-size: 1.6em;
+            margin-bottom: 10px;
+        }
+
+        .momento p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .momento em {
+            color: #d23669;
+            font-style: normal;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        /* ESTILOS DAS IMAGENS */
+        .momento img {
+            width: 100%;
+            max-width: 400px;
+            max-height: 300px;
+            border-radius: 12px;
+            margin: 15px auto;
+            display: block;
+            object-fit: cover;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .momento img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* SEÇÃO DE PRÓXIMOS MOMENTOS */
+        .proximos-momentos {
+            background: white;
+            padding: 40px;
+            margin: 50px auto;
+            max-width: 900px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .relogio-contagem {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .relogio-item {
+            background: #d23669;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 80px;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .relogio-legenda {
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .formulario-momento {
+            margin-top: 40px;
+            text-align: left;
+            padding: 0 20px;
+        }
+
+        .formulario-momento input,
+        .formulario-momento textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .formulario-momento button {
+            background: #d23669;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .formulario-momento button:hover {
+            background: #b52b5a;
+        }
+
+        /* SEÇÃO DE CONCLUSÃO */
+        .conclusao {
+            background: #ffebee;
+            padding: 50px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .conclusao h2 {
+            color: #d23669;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .conclusao p {
+            max-width: 800px;
+            margin: 0 auto 15px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .conclusao .assinatura {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .conclusao .coracao-final {
+            font-size: 3em;
+            margin-top: 20px;
+            color: #d23669;
+        }
+
+        /* RODAPÉ */
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: #ffebee;
+            font-size: 1.1em;
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+
+            .momento {
+                width: 85%;
+                padding: 25px;
+                padding-left: 60px;
+                padding-right: 25px;
+                left: 0 !important;
+            }
+
+            .momento::after {
+                left: 18px !important;
+            }
+            
+            .momento img {
+                max-width: 300px;
+                max-height: 250px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .subtitulo {
+                font-size: 1.1em;
+            }
+            
+            .mensagem-presente {
+                font-size: 1.5em;
+            }
+            
+            .botao-presente {
+                font-size: 1.2em;
+                padding: 12px 30px;
+            }
+
+            .relogio-item {
+                padding: 15px;
+                min-width: 70px;
+                font-size: 1.2em;
+            }
+
+            .conclusao h2 {
+                font-size: 1.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .momento img {
+                max-width: 250px;
+                max-height: 200px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .momento h2 {
+                font-size: 1.4em;
+            }
+            
+            .relogio-contagem {
+                gap: 10px;
+            }
+            
+            .relogio-item {
+                padding: 10px;
+                min-width: 60px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TELA DE ABERTURA -->
+    <div id="tela-presente">
+        <div class="mensagem-presente">
+            <p>Para o amor da minha vida <span class="coracao">❤️</span></p>
+            <p>Feito de Coração</p>
+        </div>
+        <button class="botao-presente" id="abrir-presente">Clique para abrir seu presente</button>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div id="conteudo-principal">
+        <!-- CABEÇALHO -->
+        <header>
+            <h1>Feliz Aniversário, Meu Amor</h1>
+            <p class="subtitulo">Neste momento, nosso maior presente é investir no sonho do nosso casamento, mas quis criar algo eterno para mostrar que o amor não se mede em valor, e sim em gestos que vêm direto do coração. Cada linha deste site foi escrita com a mesma dedicação que coloco em construir nossa vida juntos. Te amo hoje, amanhã e sempre. ❤️</p>
+        </header>
+
+        <!-- LINHA DO TEMPO -->
+        <div class="timeline">
+            <!-- MOMENTO 1 -->
+            <div class="momento">
+                <h2>📅 2022 - Se o amor existe, vale a pena arriscar</h2>
+                <em>10 de Julho de 2022</em>
+                <p>Tudo era novo: uma paixão intensa, a dúvida de como uma pessoa tão especial poderia querer alguém como eu, e o medo de não ser a pessoa certa para você. A insegurança sussurrava, o temor falava alto, mas o amor gritou mais forte, provando que eu era a sua escolha certa!</p>
+                <img src="imagens/primeiro-encontro.jpeg" alt="Nosso primeiro encontro">
+            </div>
+
+            <!-- MOMENTO 2 -->
+            <div class="momento">
+                <h2>❤️ O Amor existe e eu posso provar</h2>
+                <em>10 de Julho de 2023</em>
+                <p>Neste momento já não havia dúvidas sobre nosso amor e sobre a pessoa maravilhosa com quem eu estava me relacionando. Você me prova diariamente seu amor, fazendo coisas incríveis pelo nosso relacionamento. Toda mudança foi necessária para eu viver plenamente ao lado da mulher que amo.</p>
+                <img src="imagens/primeiro-date.jpeg" alt="Nosso primeiro encontro especial">
+            </div>
+
+            <!-- MOMENTO 3 -->
+            <div class="momento">
+                <h2>💍 Minha Noiva e Futura Esposa</h2>
+                <em>10 de Julho de 2024</em>
+                <p>Depois de testar nosso amor muitas vezes, depois de tantas experiências, aquela pessoa que eu temia não ser suficiente para, hoje, agradece e proclama ao mundo inteiro que me ama. Hoje você é minha noiva e será minha eterna esposa. Depois de tantas dúvidas sobre se o amor verdadeiro existe, tive a absoluta certeza que sim - ele se revela não apenas no "eu te amo", mas em cada gesto, cada olhar, cada demonstração de carinho. Com você, não apenas mudei de vida, como aprendi o verdadeiro significado do amor.</p>
+                <img src="imagens/primeiro-beijo.jpg" alt="Nossa foto de noivado">
+            </div>
+        </div>
+
+        <!-- SEÇÃO DE PRÓXIMOS MOMENTOS -->
+        <div class="proximos-momentos">
+            <h2 style="color: #d23669;">Contagem Regressiva para Nosso Sonho</h2>
+            <p>Faltam apenas para o dia 19 de Julho de 2025:</p>
+            
+            <div class="relogio-contagem">
+                <div class="relogio-item">
+                    <span id="dias">00</span>
+                    <div class="relogio-legenda">Dias</div>
+                </div>
+                <div class="relogio-item">
+                    <span id="horas">00</span>
+                    <div class="relogio-legenda">Horas</div>
+                </div>
+                <div class="relogio-item">
+                    <span id="minutos">00</span>
+                    <div class="relogio-legenda">Minutos</div>
+                </div>
+                <div class="relogio-item">
+                    <span id="segundos">00</span>
+                    <div class="relogio-legenda">Segundos</div>
+                </div>
+            </div>
+
+            <div class="formulario-momento">
+                <h3>Planeje Nosso Próximo Momento Especial</h3>
+                <input type="text" id="titulo-momento" placeholder="Título do momento (ex: Nosso casamento)">
+                <input type="date" id="data-momento">
+                <textarea id="descricao-momento" rows="4" placeholder="Descreva como será este momento especial..."></textarea>
+                <button id="adicionar-momento">Adicionar à Nossa Linha do Tempo</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO DE CONCLUSÃO -->
+        <div class="conclusao">
+            <h2>Nossa Jornada Continua...</h2>
+            <p>Minha amada, este site é apenas o começo da nossa eterna história.</p>
+            <p>Cada dia ao seu lado é uma página nova sendo escrita, cada olhar é um parágrafo de emoção, cada "eu te amo" é um capítulo de felicidade.</p>
+            <p>Que possamos preencher essa linha do tempo com infinitos momentos, até que nossos cabelos brancos contem mais histórias que estas páginas possam registrar.</p>
+            <p style="margin-top: 30px; font-style: italic;">Obrigado por ser minha companheira em cada sonho,</p>
+            <p class="assinatura">Guilherme</p>
+            <div class="coracao-final">❤️</div>
+        </div>
+
+        <!-- RODAPÉ -->
+        <footer>
+            <p>Feito com todo o meu amor - 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        // ANIMAÇÃO PARA ABRIR O PRESENTE
+        document.getElementById('abrir-presente').addEventListener('click', function() {
+            const tela = document.getElementById('tela-presente');
+            const conteudo = document.getElementById('conteudo-principal');
+            
+            // Animação de desaparecimento da tela inicial
+            tela.classList.add('fade-out');
+            
+            // Mostra o conteúdo principal com fade-in
+            setTimeout(function() {
+                conteudo.style.display = 'block';
+                setTimeout(function() {
+                    conteudo.style.opacity = '1';
+                }, 50);
+            }, 1000);
+            
+            // Inicia a animação da linha do tempo
+            setTimeout(function() {
+                const momentos = document.querySelectorAll('.momento');
+                
+                function checkVisibility() {
+                    const windowHeight = window.innerHeight;
+                    const triggerPoint = windowHeight / 5 * 4;
+                    
+                    momentos.forEach(momento => {
+                        const rect = momento.getBoundingClientRect();
+                        if (rect.top < triggerPoint) {
+                            momento.classList.add('visible');
+                        }
+                    });
+                }
+                
+                // Verifica ao carregar e ao rolar
+                checkVisibility();
+                window.addEventListener('scroll', checkVisibility);
+            }, 1500);
+        });
+
+        // RELÓGIO DE CONTAGEM REGRESSIVA PARA 19 DE JULHO DE 2025
+        function atualizarContagemRegressiva() {
+            const dataEvento = new Date("2025-07-19T00:00:00").getTime();
+            const agora = new Date().getTime();
+            const diferenca = dataEvento - agora;
+
+            // Cálculos do tempo restante
+            const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+
+            // Atualiza o display
+            document.getElementById("dias").textContent = dias.toString().padStart(2, '0');
+            document.getElementById("horas").textContent = horas.toString().padStart(2, '0');
+            document.getElementById("minutos").textContent = minutos.toString().padStart(2, '0');
+            document.getElementById("segundos").textContent = segundos.toString().padStart(2, '0');
+        }
+
+        // Atualiza a cada segundo
+        setInterval(atualizarContagemRegressiva, 1000);
+        atualizarContagemRegressiva(); // Executa imediatamente
+
+        // FORMULÁRIO PARA ADICIONAR NOVOS MOMENTOS
+        document.getElementById("adicionar-momento").addEventListener("click", function() {
+            const titulo = document.getElementById("titulo-momento").value;
+            const data = document.getElementById("data-momento").value;
+            const descricao = document.getElementById("descricao-momento").value;
+
+            if (titulo && data && descricao) {
+                const dataFormatada = new Date(data).toLocaleDateString('pt-BR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                
+                const novoMomento = `
+                    <div class="momento">
+                        <h2>${titulo}</h2>
+                        <em>${dataFormatada}</em>
+                        <p>${descricao}</p>
+                        <img src="imagens/nova-foto.jpg" alt="${titulo}">
+                    </div>
+                `;
+
+                document.querySelector('.timeline').insertAdjacentHTML('beforeend', novoMomento);
+                
+                // Limpa o formulário
+                document.getElementById("titulo-momento").value = "";
+                document.getElementById("data-momento").value = "";
+                document.getElementById("descricao-momento").value = "";
+
+                // Mostra mensagem de sucesso
+                alert("Novo momento adicionado com sucesso à nossa história!");
+                
+                // Rola a página para o novo momento
+                const momentos = document.querySelectorAll('.momento');
+                momentos[momentos.length - 1].scrollIntoView({ behavior: 'smooth' });
+                
+            } else {
+                alert("Por favor, preencha todos os campos para registrar nosso momento especial!");
+            }
+        });
+    </script>
+</body>
+</html>
